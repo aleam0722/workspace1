@@ -1,0 +1,217 @@
+1.
+select s1.sid from sc s1,sc s2
+where s1.sid=s2.sid
+and s1.cid='01'
+and s2.cid='02'
+and s1.score>s2.score;
+
+2.
+select s1.sid,avg(s2.score)from student s1,sc s2
+where s1.sid=s2.sid
+group by s1.sid
+having avg(s2.score)>60;
+
+3.
+select s1.sid,s1.sname,count(s2.cid),sum(s2.score)
+from student s1,sc s2
+where s1.sid=s2.sid
+group by s1.sid,s1.sname;
+
+4.
+select count(t.tid) as total
+from teacher t
+where tname like '李%';
+
+5.
+select s1.* from student s1
+where s1.sid not in(
+select s2.sid from sc s2
+join(
+select s3.cid from course s3
+where s3.tid in(
+select s4.tid
+from teacher s4
+where s4.tname ='张三'
+)) t1 on s2.cid=t1.cid);
+
+6.
+select t1.sid from sc t1
+inner join 
+(select t2.sid from sc t2
+where t2.cid in
+(select s2.cid from course s2
+where s2.cname='数学')) t3 on t1.sid=t3.sid
+where t1.cid in
+(select s1.cid from course s1
+where s1.cname='语文');
+
+select t2.sid from sc t2
+where t2.cid in
+(select s2.cid from course s2
+where s2.cname='数学');
+
+7.
+select s1.* from student s1
+where s1.sid in(
+select s2.sid from sc s2
+join(
+select s3.cid from course s3
+where s3.tid in(
+select s4.tid
+from teacher s4
+where s4.tname ='张三'
+)) t1 on s2.cid=t1.cid);
+
+
+8.
+select t.sid,sname from student t
+where t.sid in(
+select s1.sid from sc s1,sc s2
+where s1.sid=s2.sid
+and s1.cid='01'
+and s2.cid='02'
+and s1.score<s2.score);
+
+9.
+select distinct s1.sid,s1.sname
+from student s1,sc s2
+where s1.sid=s2.sid
+and s2.score<60;
+
+10.
+select distinct s1.sid,s1.sname from student s1,course s3
+join (select count(cid) c,sid from sc group by sid ) s2 on s1.sid=s2.sid
+where s2.c!=3;
+
+11.
+select  distinct s1.sid,s1.sname from student s1
+join sc s2 on s1.sid=s2.sid
+where s2.cid in
+(select cid from sc where sid='01') 
+;
+
+12.
+select s2.sid,s2.sname from student s2
+join (select s1.sid, count(s1.cid) a from sc s1
+group by s1.sid
+having count(s1.cid)=3
+)s4 on s2.sid=s4.sid 
+where s4.a in
+(select count(s1.cid) from sc s1
+where s1.sid='01');
+
+13.
+select s1.sid,s1.sname,avg(s2.score) avg_score
+from student s1,sc s2
+join sc s3 on s1.sid=s2.sid and s2.sid=s3.sid
+where s3.score<60 
+group by s1.sid,s1.sname
+having count(s3.cid)>2;
+
+14.
+select s1.* from student s1
+join
+(select s2.sid,s2.score a from sc s2
+where s2.cid='01'
+and s2.score<60
+order by a desc
+)  t on s1.sid=t.sid
+ ; 
+
+15.
+select s1.cid ,s2.cname ,max(s1.score) ,min(s1.score),avg(s1.score)
+from sc s1,course s2
+where s1.cid=s2.cid
+group by s1.cid,s2.cname
+
+16.
+select s1.sid,sum(s1.score) total from sc s1
+group by s1.sid
+order by total desc;
+
+17.
+select s2.* ,t1.avg from sc s2
+join
+(select s1.sid,avg(s1.score) avg from sc s1
+group by s1.sid) t1 on s2.sid=t1.sid
+order by t1.avg desc;
+
+18.
+select s3.cid cid,t1.b tname,avg(s3.score) avg from sc s3
+join 
+(select s1.tid a,s1.tname b,s2.cid c,s2.cname d
+from teacher s1,course s2
+where s1.tid=s2.tid) t1 on s3.cid=t1.c
+group by s3.cid,t1.b;
+
+19.
+select s1.cid,count(s1.sid) total from sc s1
+group by s1.cid
+
+20.
+select s1.sid,s1.sname
+from student s1
+where s1.sid in
+(select s2.sid 
+from sc s2
+group by s2.sid
+having count(s2.cid)=1);
+
+21.
+select s1.ssex,count(*) from student s1
+group by s1.ssex;
+
+22.
+select * from student 
+where sname like '%风%';
+
+23.
+select sname ,count(*) from student
+group by sname
+having count(*)>1;
+
+24.
+select * from student
+where sage like'%1990%';
+
+25.
+select cid,avg(score) avg
+from sc
+group by cid
+order by avg desc,cid desc;
+
+26.
+select * from sc
+where score<60
+order by cid asc;
+
+27.
+select sid,cid,score from(select sid,cid,score,rank() over (partition by cid order by score desc) t
+from sc) a
+where a.t<3;
+
+28.
+select cid,count(sid) num from sc
+group by cid
+having num>5
+order by num desc,cid asc;
+
+29.
+select sid,count(cid) num from sc
+group by sid
+having num>2;
+
+30.
+select s1.* from student s1
+where s1.sid in
+(select sid from sc
+group by sid
+having count(cid)=3);
+
+
+
+
+
+
+
+

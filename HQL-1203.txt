@@ -83,7 +83,6 @@ select distinct s1.sid,s1.sname from student s1,course s3
 join (select count(cid) c,sid from sc group by sid ) s2 on s1.sid=s2.sid
 where s2.c!=3;
 
-<<<<<<< HEAD
 11.
 select  distinct s1.sid,s1.sname from student s1
 join sc s2 on s1.sid=s2.sid
@@ -125,15 +124,94 @@ from sc s1,course s2
 where s1.cid=s2.cid
 group by s1.cid,s2.cname
 
-OK!
+16.
+select s1.sid,sum(s1.score) total from sc s1
+group by s1.sid
+order by total desc;
 
-不同意也得同意
+17.
+select s2.* ,t1.avg from sc s2
+join
+(select s1.sid,avg(s1.score) avg from sc s1
+group by s1.sid) t1 on s2.sid=t1.sid
+order by t1.avg desc;
 
-Hello it's me!
+18.
+select s3.cid cid,t1.b tname,avg(s3.score) avg from sc s3
+join 
+(select s1.tid a,s1.tname b,s2.cid c,s2.cname d
+from teacher s1,course s2
+where s1.tid=s2.tid) t1 on s3.cid=t1.c
+group by s3.cid,t1.b;
+
+19.
+select s1.cid,count(s1.sid) total from sc s1
+group by s1.cid
+
+20.
+select s1.sid,s1.sname
+from student s1
+where s1.sid in
+(select s2.sid 
+from sc s2
+group by s2.sid
+having count(s2.cid)=1);
+
+21.
+select s1.ssex,count(*) from student s1
+group by s1.ssex;
+
+22.
+select * from student 
+where sname like '%风%';
+
+23.
+select sname ,count(*) from student
+group by sname
+having count(*)>1;
+
+24.
+select * from student
+where sage like'%1990%';
+
+25.
+select cid,avg(score) avg
+from sc
+group by cid
+order by avg desc,cid desc;
+
+26.
+select * from sc
+where score<60
+order by cid asc;
+
+27.
+select sid,cid,score from(select sid,cid,score,rank() over (partition by cid order by score desc) t
+from sc) a
+where a.t<3;
+
+28.
+select cid,count(sid) num from sc
+group by cid
+having num>5
+order by num desc,cid asc;
+
+29.
+select sid,count(cid) num from sc
+group by sid
+having num>2;
+
+30.
+select s1.* from student s1
+where s1.sid in
+(select sid from sc
+group by sid
+having count(cid)=3);
+
+111
 
 
 
 
-=======
-public hhh
->>>>>>> cebfb1241edc43d3e0943e563d3396fb4323c8cf
+
+

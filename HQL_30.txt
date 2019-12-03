@@ -208,3 +208,4 @@ where s1.sid in
 group by sid
 having count(cid)=3);
 
+jdksljkdlfsjkl
